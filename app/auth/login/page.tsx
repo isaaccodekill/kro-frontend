@@ -1,15 +1,44 @@
 'use client';
 
-import { Input, Button, Form, type FormProps } from "antd";
+import { Input, Button, Form, type FormProps, notification } from "antd";
+import {usePostRequest} from "@/queries";
+import {useAuth} from "@/app/context/auth-context";
+import { login as loginApi } from "@/api/user";
+import Link from "next/link";
 
 type FieldTypes = {
     email: string;
     password: string;
 }
+
+const openNotificationWithIcon = (type: "success" | "error", title: string, message: string) => {
+    notification[type]({
+        message: title,
+        description: message,
+        placement: "bottomRight",
+        duration: 5
+    });
+};
 export default function Page() {
 
+    const { login } = useAuth();
+
+    const onSuccess = (data: any) => {
+        login(data);
+    }
+
+    const onError = (error: any) => {
+        console.log(error.detail, error.message, error);
+        openNotificationWithIcon("error", "Error", error);
+        // show error message in toast
+    }
+
+    const { mutate, isPending } =  usePostRequest((data: FieldTypes) => loginApi(data), onSuccess, onError, { retry: false });
+
+
+
 const onFinish = (values: FieldTypes) => {
-    console.log("Success:", values);
+    mutate(values);
 }
 
 const onFinishFailed = (errorInfo: FormProps<FieldTypes>) => {
@@ -49,10 +78,13 @@ const initialValues = {
                 />
             </Form.Item>
             <Form.Item>
-                <Button type="primary" htmlType="submit" className="w-full">
+                <Button type="primary" loading={isPending} htmlType="submit" className="w-full">
                     Log in
                 </Button>
             </Form.Item>
+            <div className="flex justify-center">
+                <Link href="/auth/signup">Sign up</Link>
+            </div>
         </Form>
         </main>
     );

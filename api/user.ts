@@ -2,33 +2,44 @@ import {request} from "@/api/index";
 
 export const getUserProfile = async () => {
     await request({
-        url: "/me",
+        url: "/user/profile",
         method: "GET",
     })
 }
 
-export const login = async (email: string, password: string) => {
+type LoginDataType = {
+    email: string
+    password: string
+}
+
+export const login = async (data: LoginDataType) => {
     // make post api request sending along the json body
     await request({
-        url: "/login",
+        url: "/auth/login",
         method: "POST",
         data: JSON.stringify({
-            password,
-            email
+            password: data.password,
+            email: data.email
         })
     })
 }
 
+type SignUpDataType = {
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string
+}
 
-export const signup = async (firstName: string, lastName: string, email: string, password: string ) => {
+export const signup = async (signUpData: SignUpDataType) => {
     await request({
-        url: "/signup",
+        url: "/auth/register",
         method: "POST",
         data: JSON.stringify({
-            password,
-            email,
-            firstName,
-            lastName,
+            first_name: signUpData.firstName,
+            last_name: signUpData.lastName,
+            email: signUpData.email,
+            password: signUpData.password
         })
     })
 }

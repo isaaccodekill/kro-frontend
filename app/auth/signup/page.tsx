@@ -1,6 +1,11 @@
 'use client';
 
-import { Input, Button, Form, type FormProps } from "antd";
+import {Input, Button, Form, type FormProps, notification} from "antd";
+import Link from "next/link";
+import {useRouter} from "next/navigation";
+import {router} from "next/client";
+import {usePostRequest} from "@/queries";
+import {signup} from "@/api/user";
 
 type FieldTypes = {
     email: string;
@@ -10,11 +15,32 @@ type FieldTypes = {
 }
 
 
-export default function Page() {
+const openNotificationWithIcon = (type: "success" | "error", title: string, message: string) => {
+    notification[type]({
+        message: title,
+        description: message,
+        placement: "bottomRight",
+        duration: 5
+    });
+};
 
+export default function Page() {
+    const  router = useRouter();
+    const onSuccess = (data: any) => {
+        openNotificationWithIcon("success", "Success", "You have successfully signed up");
+        router.push("/auth/login");
+    }
+
+    const onError = (error: any) => {
+
+        openNotificationWithIcon("error", "Error", error);
+        // show error message in toast
+    }
+
+    const { mutate, isPending } =  usePostRequest((data: FieldTypes) => signup(data), onSuccess, onError, { retry: false });
 
     const onFinish = (values: FieldTypes) => {
-        console.log("Success:", values);
+        mutate(values);
     }
 
     const onFinishFailed = (errorInfo: FormProps<FieldTypes>) => {
@@ -26,6 +52,9 @@ export default function Page() {
         firstName: "",
         lastName: ""
     }
+
+
+
 
 
 
@@ -83,12 +112,16 @@ export default function Page() {
             </Form.Item>
 
             <Button type="primary"
+                    loading={isPending}
                     htmlType="submit"
             className="w-full"
                     size={"large"}
             >
             Sign up
             </Button>
+            <div className="flex justify-center mt-10">
+                <Link href="/auth/login">Login</Link>
+            </div>
         </Form>
         </main>
     );
