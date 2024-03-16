@@ -1,9 +1,9 @@
-export const getTransactions = async () => {
-    const response = await fetch("url/transactions", {
-        headers: {
-            "Content-type": "Application/json"
-        },
-    })
+import axios from 'axios'
+import {request} from "@/api/index";
 
-    return await response.json();
+export const getTransactions = async () => {
+    await request({
+        url: "/transactions",
+        method: "GET",
+    })
 }

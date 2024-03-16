@@ -1,40 +1,34 @@
+import {request} from "@/api/index";
+
 export const getUserProfile = async () => {
-    const response = await fetch("url")
-    return await response.json()
+    await request({
+        url: "/me",
+        method: "GET",
+    })
 }
 
 export const login = async (email: string, password: string) => {
     // make post api request sending along the json body
-
-    const response = await fetch("url", {
+    await request({
+        url: "/login",
         method: "POST",
-        headers: {
-            "Content-type": "Application/json"
-        },
-        body: JSON.stringify({
-            email,
-            password
+        data: JSON.stringify({
+            password,
+            email
         })
     })
-
-    return await response.json()
-
 }
 
 
-const signup = async (firstName: string, lastName: string, email: string, password: string ) => {
-    const response = await fetch("url", {
+export const signup = async (firstName: string, lastName: string, email: string, password: string ) => {
+    await request({
+        url: "/signup",
         method: "POST",
-        headers: {
-            "Content-type": "Application/json"
-        },
-        body: JSON.stringify({
+        data: JSON.stringify({
+            password,
+            email,
             firstName,
             lastName,
-            email,
-            password
         })
     })
-
-    return await response.json()
 }
