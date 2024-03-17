@@ -17,11 +17,19 @@ export const request = async (options: AxiosRequestConfig<any>) => {
     }
 
     const onError = (error: any) => {
-
+        console.log(error.response, error.status, error.message, error)
         const errorBody = error.response || error.message;
-        console.log(errorBody)
-        const errorData = errorBody.data.detail;
 
+        // if network error
+        if (errorBody === undefined) {
+            return Promise.reject("Network error. Please try again.");
+        }
+
+        if (errorBody.status === 500) {
+            return Promise.reject("Something went wrong. Please try again.");
+        }
+
+         const errorData = errorBody.data?.detail;
 
         // if 401 error, logout user
         if (errorBody.status === 401) {
