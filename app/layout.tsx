@@ -21,7 +21,7 @@ export default function RootLayout({
         <QueryClientProvider client={queryClient}>
          <AuthProvider>
              <AuthWrapper>
-                    {children}
+                     {children}
                 </AuthWrapper>
             </AuthProvider>
         </QueryClientProvider>

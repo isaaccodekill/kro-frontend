@@ -13,7 +13,7 @@ const client = axios.create({
 // @ts-ignore
 export const request = async (options: AxiosRequestConfig<any>) => {
     const onSuccess = (response: any) => {
-        return response.data.data;
+        return response.data;
     }
 
     const onError = (error: any) => {
@@ -21,6 +21,15 @@ export const request = async (options: AxiosRequestConfig<any>) => {
         const errorBody = error.response || error.message;
         console.log(errorBody)
         const errorData = errorBody.data.detail;
+
+
+        // if 401 error, logout user
+        if (errorBody.status === 401) {
+            // logout user
+            if(!window.location.pathname.includes("/auth")) {
+                window.location.href = "/auth/login";
+            }
+        }
 
         // check if error data is a string
         if (typeof errorData === "string") {

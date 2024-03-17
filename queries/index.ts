@@ -1,7 +1,6 @@
 import { cache } from "react";
 import {QueryClient, QueryKey} from "@tanstack/query-core";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import { getUserProfile, login, signup } from "../api/user";
 
 // @ts-ignore
 export const useGetRequest = (key: QueryKey, fn, options) => {

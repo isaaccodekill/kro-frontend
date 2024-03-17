@@ -1,7 +1,7 @@
 import {request} from "@/api/index";
 
 export const getUserProfile = async () => {
-    await request({
+    return await request({
         url: "/user/profile",
         method: "GET",
     })
@@ -41,5 +41,13 @@ export const signup = async (signUpData: SignUpDataType) => {
             email: signUpData.email,
             password: signUpData.password
         })
+    })
+}
+
+
+export const logout = async () => {
+    await request({
+        url: "/auth/logout",
+        method: "POST",
     })
 }

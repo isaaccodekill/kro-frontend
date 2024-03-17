@@ -1,6 +1,7 @@
 // context/AuthContext.jsx
 'use client'
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const AuthContext = createContext<
     {
@@ -27,6 +28,7 @@ export const AuthProvider = ({ children }: Readonly<{
 }>) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [user, setUser] = useState< UserDataType | null>(null);
+    const router = useRouter();
 
 
     const login = (userData : UserDataType) => {

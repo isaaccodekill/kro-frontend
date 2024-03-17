@@ -17,26 +17,26 @@ export default function AuthWrapper({ children }:  Readonly<{
 
     const router = useRouter();
     const { isAuthenticated, user, login, logout } = useAuth();
-    const { data, isLoading } =  useGetRequest(["user"], getUserProfile,
-        { enabled: !isAuthenticated,
+    const { data, isLoading, isError, isSuccess } =  useGetRequest(["user-profile"], getUserProfile,
+        {
             // @ts-ignore
-            onSuccess: (data) => login(data),
             retry: false,
-            onError: () => logout()
         }
     );
 
+
+
     useEffect(() => {
-        const isAuthPage = window.location.pathname.includes("/auth");
-        if (isAuthenticated && isAuthPage) {
+        if (data) {
+            login(data);
             router.replace("/");
-        }else if (!isAuthenticated && !isAuthPage && !isLoading) {
+        }else if (isError) {
+            logout();
             router.replace("/auth/login");
         }
+    }, [data, isError])
 
-    }, [isAuthenticated, isLoading, router])
-
-    if (isLoading) {
+    if (!isSuccess && !isError) {
         return <div>Loading...</div> // replace with lottie file
     }
 
