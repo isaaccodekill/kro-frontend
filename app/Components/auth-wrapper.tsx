@@ -24,16 +24,14 @@ export default function AuthWrapper({ children }:  Readonly<{
         }
     );
 
-    useEffect(() => {
-        const isAuthPage = window.location.pathname.includes("/auth");
-        if(isAuthenticated && isAuthPage){
-            router.replace("/");
-        }else {
-            if (!isAuthenticated && !isAuthPage) {
-                router.replace("/auth/login");
-            }
-        }
-    }, [isAuthenticated, user])
+    const isAuthPage = window.location.pathname.includes("/auth");
+   if(isAuthenticated && isAuthPage) {
+         router.replace("/");
+   }else {
+         if (!isAuthenticated && !isAuthPage) {
+              router.replace("/auth/login");
+         }
+   }
 
 
 
